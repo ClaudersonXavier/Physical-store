@@ -1,13 +1,14 @@
-import logger from './utils/loggers.js' 
-const express = require('express');
-const dotenv = require('dotenv');
+import {logger} from './utils/loggers.js' 
+import {dataBase} from './config/database.js';
+import express from 'express';
 
-dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
-app.get('/', (req: any, res: {
+dataBase();
+
+app.get('/', (_req: any, res: {
     status: any; send: (arg0: string) => void; 
 }) => {
     logger.info(`Acessando a raiz do servidor`);
