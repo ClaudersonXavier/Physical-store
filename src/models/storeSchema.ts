@@ -27,6 +27,16 @@ const storeSchema = new Schema({
     distancia: {
         type: Number,
         required: false
+    },
+    coordenadas: {
+        latitude: {
+            type: Number,
+            required: false
+        },
+        longitude: {
+            type: Number,
+            required: false
+        }
     }
 })
 

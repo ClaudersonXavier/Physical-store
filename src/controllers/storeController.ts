@@ -1,11 +1,14 @@
 import {Store} from '../models/storeSchema.js'
 import {logger} from '../utils/loggers.js'
+import {cepCoordenates} from '../utils/viaCepCoordenates.js'
+import {harvisineDistanceCalculator} from '../utils/distanceCalculate.js'
 
 
 export const createStore = async (req: any, res: any) => {
     try{
 
         const newStore = await Store.create(req.body);
+        
 
         res.status(200).json({
             status: 'Success',
@@ -106,4 +109,44 @@ export const deleteStore = async (req: any, res: any) => {
         });
         logger.error("Não foi possível deletar a loja: ", error);
     }
+}
+
+
+export const viaCep = async (req: any, res: any) =>{
+    const cep = req.params.cep
+    const userLocation = await cepCoordenates(cep);
+
+    const stores = await Store.find();
+    const storesDistance = [];
+
+    for(let store of stores){
+        const storeLocation = await cepCoordenates(store.endereco!.CEP);
+        if (storeLocation) {
+            const distance = harvisineDistanceCalculator(userLocation!.latitude, userLocation!.longitude, storeLocation.latitude, storeLocation.longitude);
+
+            if (distance <= 100) {
+                storesDistance.push({ store, distance });
+            }
+        }
+    }
+
+    storesDistance.sort((a, b) => a.distance - b.distance);
+
+    
+    if (storesDistance.length > 0) {
+        res.status(200).json({
+            status: 'Success',
+                data: {
+                    storesDistance
+                }
+        })
+        
+    } 
+    else{
+        res.status(500).json({
+            status: 'FAIL',
+                
+        })
+    }
+
 }

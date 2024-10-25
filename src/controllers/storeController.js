@@ -9,9 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteStore = exports.updateStore = exports.getStore = exports.getAllStores = exports.createStore = void 0;
+exports.viaCep = exports.deleteStore = exports.updateStore = exports.getStore = exports.getAllStores = exports.createStore = void 0;
 const storeSchema_js_1 = require("../models/storeSchema.js");
 const loggers_js_1 = require("../utils/loggers.js");
+const viaCepCoordenates_js_1 = require("../utils/viaCepCoordenates.js");
+const distanceCalculate_js_1 = require("../utils/distanceCalculate.js");
 const createStore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newStore = yield storeSchema_js_1.Store.create(req.body);
@@ -109,3 +111,33 @@ const deleteStore = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.deleteStore = deleteStore;
+const viaCep = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const cep = req.params.cep;
+    const userLocation = yield (0, viaCepCoordenates_js_1.cepCoordenates)(cep);
+    const stores = yield storeSchema_js_1.Store.find();
+    const storesDistance = [];
+    for (let store of stores) {
+        const storeLocation = yield (0, viaCepCoordenates_js_1.cepCoordenates)(store.endereco.CEP);
+        if (storeLocation) {
+            const distance = (0, distanceCalculate_js_1.harvisineDistanceCalculator)(userLocation.latitude, userLocation.longitude, storeLocation.latitude, storeLocation.longitude);
+            if (distance <= 100) {
+                storesDistance.push({ store, distance });
+            }
+        }
+    }
+    storesDistance.sort((a, b) => a.distance - b.distance);
+    if (storesDistance.length > 0) {
+        res.status(200).json({
+            status: 'Success',
+            data: {
+                storesDistance
+            }
+        });
+    }
+    else {
+        res.status(500).json({
+            status: 'FAIL',
+        });
+    }
+});
+exports.viaCep = viaCep;

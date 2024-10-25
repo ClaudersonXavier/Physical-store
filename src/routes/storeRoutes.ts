@@ -1,4 +1,4 @@
-import {createStore, getStore, getAllStores, updateStore, deleteStore} from '../controllers/storeController.js'
+import {createStore, getStore, getAllStores, updateStore, deleteStore, viaCep} from '../controllers/storeController.js'
 import {Router} from 'express'
 
 const route = Router();
@@ -12,5 +12,7 @@ route.get("/:id", getStore);
 route.patch("/:id", updateStore);
 
 route.delete("/:id", deleteStore);
+
+route.get("/viaCep/:cep", viaCep);
 
 export = route;

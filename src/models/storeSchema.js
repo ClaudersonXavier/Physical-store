@@ -51,6 +51,16 @@ const storeSchema = new mongoose_1.Schema({
     distancia: {
         type: Number,
         required: false
+    },
+    coordenadas: {
+        latitude: {
+            type: Number,
+            required: false
+        },
+        longitude: {
+            type: Number,
+            required: false
+        }
     }
 });
 exports.Store = mongoose_1.default.model('Store', storeSchema);
