@@ -48,6 +48,10 @@ const storeSchema = new mongoose_1.Schema({
             required: [true, "A loja deve dizer em qual logradouro está."]
         }
     },
+    numero: {
+        type: String,
+        required: [true, "A loja deve ter um numero."]
+    },
     distancia: {
         type: Number,
         required: false

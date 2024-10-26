@@ -1,19 +1,34 @@
-import {Store} from '../models/storeSchema.js'
 import {logger} from '../utils/loggers.js'
-import {cepCoordenates} from '../utils/viaCepCoordenates.js'
-import {harvisineDistanceCalculator} from '../utils/distanceCalculate.js'
+import { storeService } from '../services/storeService.js'
 
-
-export const createStore = async (req: any, res: any) => {
+//Criando a loja manualmente --- não finalizado (doing)
+const createStore = async (req: any, res: any) => {
     try{
-
-        const newStore = await Store.create(req.body);
-        
-
+        const data = req.body;
+        const store = await storeService.createStore(data);
         res.status(200).json({
             status: 'Success',
             data: {
-                newStore
+                store
+            }
+        });
+    }catch(error) {
+        res.status(400).json({
+            status: "Fail",
+            message: error
+        });
+        logger.error("Não foi possível criar a loja: ", error);
+    }
+}
+
+//Criando a loja com cep dado --- não finalizado (doing)
+const createStoreByCep = async (req: any, res: any) => {
+    try{
+        
+        res.status(200).json({
+            status: 'Success',
+            data: {
+                
             }
         });
     }catch(error) {
@@ -26,13 +41,13 @@ export const createStore = async (req: any, res: any) => {
 }
 
 
-export const getAllStores = async (_req: any, res: any) => {
+const getAllStores = async (_req: any, res: any) => {
     try{
-        const stores = await Store.find();
+        const stores = await storeService.getAllStores()
 
         res.status(200).json({
             status: 'Success',
-            results: Store.length,
+            results: stores.length,
             data: {
                 stores
             }
@@ -47,9 +62,9 @@ export const getAllStores = async (_req: any, res: any) => {
 }
 
 
-export const getStore = async (req: any, res: any) => {
+const getStore = async (req: any, res: any) => {
     try{
-        const store = await Store.findById(req.params.id);
+        const store = await storeService.getStoreById(req.params.id);
 
         res.status(200).json({
             status: 'Success',
@@ -67,14 +82,11 @@ export const getStore = async (req: any, res: any) => {
 }
 
 
-export const updateStore = async (req: any, res: any) => {
+const updateStore = async (req: any, res: any) => {
 
     try{
 
-        const store = await Store.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        });
+        const store = await storeService.updateStore(req.params.id, req.body);
 
         res.status(200).json({
             status: 'Success',
@@ -92,11 +104,11 @@ export const updateStore = async (req: any, res: any) => {
 }
 
 
-export const deleteStore = async (req: any, res: any) => {
+const deleteStore = async (req: any, res: any) => {
 
     try{
 
-        await Store.findByIdAndDelete(req.params.id)
+        await storeService.deleteStore(req.params.id)
 
         res.status(204).json({
             status: 'Success',
@@ -112,41 +124,33 @@ export const deleteStore = async (req: any, res: any) => {
 }
 
 
-export const viaCep = async (req: any, res: any) =>{
-    const cep = req.params.cep
-    const userLocation = await cepCoordenates(cep);
-
-    const stores = await Store.find();
-    const storesDistance = [];
-
-    for(let store of stores){
-        const storeLocation = await cepCoordenates(store.endereco!.CEP);
-        if (storeLocation) {
-            const distance = harvisineDistanceCalculator(userLocation!.latitude, userLocation!.longitude, storeLocation.latitude, storeLocation.longitude);
-
-            if (distance <= 100) {
-                storesDistance.push({ store, distance });
-            }
-        }
-    }
-
-    storesDistance.sort((a, b) => a.distance - b.distance);
-
-    
-    if (storesDistance.length > 0) {
-        res.status(200).json({
-            status: 'Success',
-                data: {
-                    storesDistance
-                }
-        })
+const viaCep = async (req: any, res: any) =>{
+    try{
+        const cep = req.params.cep
+        const storesDistance = await storeService.findNearbyStores(cep)
         
-    } 
-    else{
+            res.status(200).json({
+                status: 'Success',
+                    data: {
+                        storesDistance
+                    }
+            })
+    }catch(error){
         res.status(500).json({
             status: 'FAIL',
                 
         })
+
     }
 
+}
+
+export const storeController = {
+    createStore,
+    createStoreByCep,
+    getAllStores,
+    getStore,
+    updateStore,
+    deleteStore,
+    viaCep
 }

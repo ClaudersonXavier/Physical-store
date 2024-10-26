@@ -2,10 +2,11 @@
 const storeController_js_1 = require("../controllers/storeController.js");
 const express_1 = require("express");
 const route = (0, express_1.Router)();
-route.post("/", storeController_js_1.createStore);
-route.get("/", storeController_js_1.getAllStores);
-route.get("/:id", storeController_js_1.getStore);
-route.patch("/:id", storeController_js_1.updateStore);
-route.delete("/:id", storeController_js_1.deleteStore);
-route.get("/viaCep/:cep", storeController_js_1.viaCep);
+route.post("/", storeController_js_1.storeController.createStore);
+route.post("/cep/:cep", storeController_js_1.storeController.createStoreByCep);
+route.get("/", storeController_js_1.storeController.getAllStores);
+route.get("/:id", storeController_js_1.storeController.getStore);
+route.patch("/:id", storeController_js_1.storeController.updateStore);
+route.delete("/:id", storeController_js_1.storeController.deleteStore);
+route.get("/Cep/:cep", storeController_js_1.storeController.viaCep);
 module.exports = route;

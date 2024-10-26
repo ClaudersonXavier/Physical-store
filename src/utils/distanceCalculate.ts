@@ -1,4 +1,3 @@
-
 export const harvisineDistanceCalculator = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const radiusEarth = 6371; 
     const deltaLat = (lat2 - lat1) * Math.PI / 180;

@@ -2,10 +2,12 @@ import {logger} from './utils/loggers.js'
 import {dataBase} from './config/database.js';
 import express from 'express';
 import route from './routes/storeRoutes.js'
+import dotenv from 'dotenv'
 
+dotenv.config();
 
+const PORT = process.env.PORT;
 const app = express();
-const PORT = 3000;
 
 dataBase();
 
