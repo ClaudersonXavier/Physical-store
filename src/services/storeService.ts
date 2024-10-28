@@ -8,77 +8,125 @@ import {logger} from '../utils/loggers.js'
 
 //Criação da loja com dados manuais --- não finalizado(doing)
 const createStore = async (data: any) =>{
-    const store = new Store();
+    try{
+        const store = new Store();
+    
+        store.nome = data.nome;
+        store.endereco = data.endereco
+        store.numero = data.numero;
 
-    store.nome = data.nome;
-    store.endereco = data.endereco
-    store.numero = data.numero
-    const adress = await stringfyAdress(data)
-    store.coordenadas = await getCoordenates(adress) 
-
-    store.save();
-    return store;  
+        const adress = `${data.endereco.logradouro}, ${data.endereco.cidade}, ${data.endereco.estado}, Brasil`
+        store.coordenadas = await getCoordenates(adress) 
+    
+        store.save();
+        logger.info("Loja criada: ", store.toJSON)
+        return store;  
+    }catch(error){
+        logger.error("Não foi possivel criar a loja: ", error);
+        throw new Error('Someting goes wrong!')
+    }
 }
 
 //Criação da loja com o CEP dado --- não finalizado(doing)
-const createStoreByCep = async (data: any) =>{
-   const newData = await cepInfos(data.cep);
-   const store = new Store(newData);
+const createStoreByCep = async (data: any, cep: string) =>{
+   try{
+       const newData = await cepInfos(cep.toString());
+       const store = new Store(newData);
+    
+        store.nome = data.nome;
+        store.numero = data.numero;
+        store.endereco!.CEP = cep;
+        store.endereco!.estado = newData.estado;
+        store.endereco!.cidade = newData.localidade;
+        store.endereco!.logradouro = newData.logradouro;
 
-    store.nome = data.nome;
-    store.numero = data.numero;
 
-    store.coordenadas = await getCoordenates(data.endereco.cep) 
-
-    store.save();
-    return store;  
+        const adress = `${newData.logradouro}, ${newData.localidade}, ${newData.estado}, Brasil`
+        store.coordenadas = await getCoordenates(adress) 
+        
+        store.save();
+        logger.info("Loja criada: ", store.toJSON)
+        return store;  
+       
+   }catch(error){
+        logger.error("Não foi possivel criar a loja: ", error);
+        throw new Error('Someting goes wrong!')
+   }
 }
 
 //Pegando todas as lojas do banco de dados --- não finalizado(doing)
 const getAllStores = async () => {
-    const stores = await Store.find();
-    return stores;
+    try{
+        const stores = await Store.find();
+        return stores;
+    }catch(error){
+        logger.error("Não foi possivel acessar todas as lojas: ", error);
+        throw new Error('Someting goes wrong!');
+    }
 }
 
 //Pegando uma a loja do banco de dados pelo ID --- não finalizado(doing)
 const getStoreById = async (id: string) => {
-    const store = await Store.findById(id);
-    return store;
+    try{
+        const store = await Store.findById(id);
+        return store;
+    }catch(error){
+        logger.error("Não foi possivel acessar a loja: ", error);
+        throw new Error('Someting goes wrong!');
+    }
 }
 
 //Atualizando uma a loja do banco de dados pelo ID --- não finalizado(doing)
 const updateStore = async (id: string, params: any) => {
-    const updateStore = Store.findByIdAndUpdate(id, params,{
-        new: true,
-        runValidators: true
-    });
-    return updateStore;
+    try{
+        const updateStore = await Store.findByIdAndUpdate(id, params,{
+            new: true,
+            runValidators: true
+        });
+        return updateStore;
+    }catch(error){
+        logger.error("Não foi possivel editar a loja: ", error);
+        throw new Error('Someting goes wrong!');
+    }
 }
 
 //Deletando uma a loja do banco de dados pelo ID --- não finalizado(doing)
 const deleteStore = async (id: string) => {
-    Store.findByIdAndRemove(id);
+    try{
+        await Store.findByIdAndRemove(id);
+    }catch(error){
+        logger.error("Não foi possivel deletar a loja: ", error);
+        throw new Error('Someting goes wrong!');
+    }
 }
 
 //Query de lojas a 100 km do cep dado pelo usuario --- não finalizado(doing)
 const findNearbyStores = async (cep: string) => {
-   const userLocation = await getCoordenates(cep);
-   const nearbyStores = [];
-   const stores = await getAllStores();
-
-   for(let store of stores){
-      if(harvisineDistanceCalculator(userLocation.latitude, userLocation.longitude, store.coordenadas!.latitude!, 
-         store.coordenadas!.longitude!) <= 100){
-        nearbyStores.push(store);
-      }
+   try{
+       const newData = await cepInfos(cep.toString());
+       const adress = `${newData.logradouro}, ${newData.localidade}, ${newData.estado}, Brasil`
+       const userLocation = await getCoordenates(adress);
+       const nearbyStores = [];
+       const stores = await getAllStores();
+    
+       for(let store of stores){
+          store.distancia = harvisineDistanceCalculator(userLocation.latitude, userLocation.longitude, store.coordenadas!.latitude!, 
+            store.coordenadas!.longitude!) ;
+          if(store.distancia <= 100){
+            nearbyStores.push(store);
+          }
+       }
+    
+       nearbyStores.sort((a, b) =>{
+        if(a.distancia! < b.distancia!) return -1
+        else return 1
+       })
+    
+       return nearbyStores;
+   }catch(error){
+        logger.error("Não foi possivel acessar as lojas proximas: ", error);
+        throw new Error('Someting goes wrong!');
    }
-
-   nearbyStores.sort((a, b) =>{
-    if(a < b) return 1
-    else return -1
-   })
-
-   return nearbyStores;
 }
 
 export const storeService = {

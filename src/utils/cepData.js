@@ -19,12 +19,12 @@ const cepInfos = (cep) => __awaiter(void 0, void 0, void 0, function* () {
             loggers_js_1.logger.error(`Erro na requisição: ${response.status}`);
             throw new Error;
         }
-        loggers_js_1.logger.info(response);
-        return response;
+        const data = yield response.json();
+        return data;
     }
     catch (error) {
-        loggers_js_1.logger.info(error);
-        return null;
+        loggers_js_1.logger.error(error);
+        throw new Error('Erro no viaCep: ');
     }
 });
 exports.cepInfos = cepInfos;

@@ -8,5 +8,5 @@ route.get("/", storeController_js_1.storeController.getAllStores);
 route.get("/:id", storeController_js_1.storeController.getStore);
 route.patch("/:id", storeController_js_1.storeController.updateStore);
 route.delete("/:id", storeController_js_1.storeController.deleteStore);
-route.get("/Cep/:cep", storeController_js_1.storeController.viaCep);
+route.get("/cep/:cep", storeController_js_1.storeController.viaCep);
 module.exports = route;

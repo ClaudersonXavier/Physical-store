@@ -10,12 +10,11 @@ export const cepInfos = async (cep: string) => {
             throw new Error;
         }
 
-        logger.info(response);
-
-        return response;
+        const data = await response.json()
+        return data;
     }catch(error){
-        logger.info(error);
-        return null;
+        logger.error(error);
+        throw new Error('Erro no viaCep: ');
     }
 }
 

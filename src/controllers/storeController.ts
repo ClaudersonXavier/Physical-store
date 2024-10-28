@@ -24,11 +24,13 @@ const createStore = async (req: any, res: any) => {
 //Criando a loja com cep dado --- não finalizado (doing)
 const createStoreByCep = async (req: any, res: any) => {
     try{
-        
+        const data = req.body;
+        const cep = req.params.cep
+        const store = await storeService.createStoreByCep(data, cep);
         res.status(200).json({
             status: 'Success',
             data: {
-                
+                store
             }
         });
     }catch(error) {
@@ -85,7 +87,6 @@ const getStore = async (req: any, res: any) => {
 const updateStore = async (req: any, res: any) => {
 
     try{
-
         const store = await storeService.updateStore(req.params.id, req.body);
 
         res.status(200).json({
@@ -112,7 +113,7 @@ const deleteStore = async (req: any, res: any) => {
 
         res.status(204).json({
             status: 'Success',
-            data: null
+            data: {}
         });
     }catch(error) {
         res.status(404).json({
@@ -129,18 +130,18 @@ const viaCep = async (req: any, res: any) =>{
         const cep = req.params.cep
         const storesDistance = await storeService.findNearbyStores(cep)
         
-            res.status(200).json({
-                status: 'Success',
-                    data: {
-                        storesDistance
-                    }
-            })
+        res.status(200).json({
+            status: 'Success',
+            data: {
+                storesDistance
+            }
+        })
     }catch(error){
         res.status(500).json({
             status: 'FAIL',
-                
+            message: error
         })
-
+        logger.info("Não foi possivel filtrar as lojas: ", error);
     }
 
 }

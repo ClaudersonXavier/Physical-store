@@ -35,9 +35,14 @@ const createStore = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 //Criando a loja com cep dado --- não finalizado (doing)
 const createStoreByCep = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const data = req.body;
+        const cep = req.params.cep;
+        const store = yield storeService_js_1.storeService.createStoreByCep(data, cep);
         res.status(200).json({
             status: 'Success',
-            data: {}
+            data: {
+                store
+            }
         });
     }
     catch (error) {
@@ -108,7 +113,7 @@ const deleteStore = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         yield storeService_js_1.storeService.deleteStore(req.params.id);
         res.status(204).json({
             status: 'Success',
-            data: null
+            data: {}
         });
     }
     catch (error) {
@@ -133,7 +138,9 @@ const viaCep = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         res.status(500).json({
             status: 'FAIL',
+            message: error
         });
+        loggers_js_1.logger.info("Não foi possivel filtrar as lojas: ", error);
     }
 });
 exports.storeController = {

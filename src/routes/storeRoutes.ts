@@ -15,6 +15,6 @@ route.patch("/:id", storeController.updateStore);
 
 route.delete("/:id", storeController.deleteStore);
 
-route.get("/Cep/:cep", storeController.viaCep);
+route.get("/cep/:cep", storeController.viaCep);
 
 export = route;
