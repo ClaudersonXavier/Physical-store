@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
-import {logger} from '../utils/loggers.js'
 
+//Criação do modelo da loja
 const storeSchema = new Schema({
     nome: {
         type: String,
@@ -44,4 +44,5 @@ const storeSchema = new Schema({
     }
 })
 
+//Exportação do modelo da loja
 export const Store = mongoose.model('Store', storeSchema);

@@ -1,11 +1,14 @@
 import {storeController} from '../controllers/storeController.js'
 import {Router} from 'express'
+import { validateCep } from '../middlewares/validationCep.js';
 
 const route = Router();
 
-route.post("/", storeController.createStore);
+//Rotas com todas funções sobre as lojas
 
-route.post("/cep/:cep", storeController.createStoreByCep);
+route.post("/", validateCep ,storeController.createStore);
+
+route.post("/cep/:cep", validateCep ,storeController.createStoreByCep);
 
 route.get("/", storeController.getAllStores);
 
@@ -15,6 +18,6 @@ route.patch("/:id", storeController.updateStore);
 
 route.delete("/:id", storeController.deleteStore);
 
-route.get("/cep/:cep", storeController.viaCep);
+route.get("/cep/:cep", validateCep, storeController.findNearbyStores);
 
 export = route;

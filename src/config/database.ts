@@ -7,7 +7,7 @@ mongoose.set('strictQuery', false);
 
 const DB = process.env.DATABASE!;
 
-
+//Função para inicialização e conexão com o banco de dados.
 export const dataBase = async () =>{
     try{
        await mongoose.connect(DB).then((con: { connections: any; }) =>{

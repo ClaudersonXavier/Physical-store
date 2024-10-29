@@ -23,7 +23,7 @@ const getCoordenates = (adress) => __awaiter(void 0, void 0, void 0, function* (
         };
     }
     catch (error) {
-        throw new Error('Erro nomatin');
+        throw new Error('Erro ao tentar achar as coordenadas');
     }
 });
 exports.getCoordenates = getCoordenates;

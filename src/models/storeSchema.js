@@ -25,6 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Store = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+//Criação do modelo da loja
 const storeSchema = new mongoose_1.Schema({
     nome: {
         type: String,
@@ -67,4 +68,5 @@ const storeSchema = new mongoose_1.Schema({
         }
     }
 });
+//Exportação do modelo da loja
 exports.Store = mongoose_1.default.model('Store', storeSchema);

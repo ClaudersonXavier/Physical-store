@@ -19,6 +19,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 dotenv_1.default.config();
 mongoose_1.default.set('strictQuery', false);
 const DB = process.env.DATABASE;
+//Função para inicialização e conexão com o banco de dados.
 const dataBase = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield mongoose_1.default.connect(DB).then((con) => {

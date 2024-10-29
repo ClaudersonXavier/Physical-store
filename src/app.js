@@ -14,10 +14,6 @@ const app = (0, express_1.default)();
 (0, database_js_1.dataBase)();
 app.use(express_1.default.json());
 app.use('/api/v1/stores', storeRoutes_js_1.default);
-app.get('/', (_req, res) => {
-    loggers_js_1.logger.info(`Acessando a raiz do servidor`);
-    res.status(200).send('Estou funcionando');
-});
 app.listen(PORT, () => {
     loggers_js_1.logger.info(`Servidor está rodando em http://localhost:${PORT}`);
 });

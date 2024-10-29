@@ -16,7 +16,7 @@ const cepInfos = (cep) => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield fetch(`https://viacep.com.br/ws/${cep}/json/`);
         loggers_js_1.logger.info(response);
         if (!response.ok) {
-            loggers_js_1.logger.error(`Erro na requisição: ${response.status}`);
+            loggers_js_1.logger.error(`Erro na requisição ao viacep.`);
             throw new Error;
         }
         const data = yield response.json();
@@ -24,7 +24,7 @@ const cepInfos = (cep) => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         loggers_js_1.logger.error(error);
-        throw new Error('Erro no viaCep: ');
+        throw new Error('Erro na requisição ao viacep.');
     }
 });
 exports.cepInfos = cepInfos;

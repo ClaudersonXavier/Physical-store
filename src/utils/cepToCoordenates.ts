@@ -12,6 +12,6 @@ export const getCoordenates = async (adress: string) =>{
             longitude: Data[0].lon,
         };
     } catch(error){
-        throw new Error('Erro nomatin');
+        throw new Error('Erro ao tentar achar as coordenadas');
     }
 }

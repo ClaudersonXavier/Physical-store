@@ -6,7 +6,7 @@ export const cepInfos = async (cep: string) => {
         logger.info(response);
          
          if (!response.ok) {
-            logger.error(`Erro na requisição: ${response.status}`);
+            logger.error(`Erro na requisição ao viacep.`);
             throw new Error;
         }
 
@@ -14,7 +14,7 @@ export const cepInfos = async (cep: string) => {
         return data;
     }catch(error){
         logger.error(error);
-        throw new Error('Erro no viaCep: ');
+        throw new Error('Erro na requisição ao viacep.');
     }
 }
 
