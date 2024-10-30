@@ -1,3 +1,5 @@
+import { logger } from "./loggers";
+
 export const getCoordenates = async (adress: string) =>{
     try{
         const Response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adress)}`);
@@ -6,7 +8,9 @@ export const getCoordenates = async (adress: string) =>{
         if (Data.length === 0) {
             throw new Error('Coordenadas não encontradas');
         }
-    
+        
+
+        logger.info("Requesição ao nomation.")
         return {
             latitude: Data[0].lat,
             longitude: Data[0].lon,

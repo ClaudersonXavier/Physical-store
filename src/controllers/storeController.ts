@@ -67,7 +67,7 @@ const getAllStores = async (_req: any, res: any) => {
             status: "Fail",
             message: "Conteúdo não encontrado!"
         });
-        logger.error("Não foi possivel de achar as lojas: ", error);
+        logger.error("Não foi possivel achar as lojas: ", error);
     }
 }
 

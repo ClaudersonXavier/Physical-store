@@ -77,7 +77,7 @@ const getAllStores = (_req, res) => __awaiter(void 0, void 0, void 0, function* 
             status: "Fail",
             message: "Conteúdo não encontrado!"
         });
-        loggers_js_1.logger.error("Não foi possivel de achar as lojas: ", error);
+        loggers_js_1.logger.error("Não foi possivel achar as lojas: ", error);
     }
 });
 //Pegando uma loja específica pelo id no banco de dados

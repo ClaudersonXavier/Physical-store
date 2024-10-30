@@ -4,7 +4,6 @@ export const validateCep = (req: any, res: any, next: any) => {
 
     // Verifica se o CEP está presente
     const cep: string = data || data.CEP || data.endereco.CEP;
-    console.log(cep)
 
     if (!cep) {
         return res.status(400).json({
@@ -16,6 +15,13 @@ export const validateCep = (req: any, res: any, next: any) => {
     
 
     if(cep.length > 9 || cep.length < 8){
+        return res.status(400).json({
+            status: 'Fail',
+            message: 'Cep inválido, informe um cep válido!'
+        });
+    }
+
+    if(cep.includes('-') && cep[5] !== '-'){
         return res.status(400).json({
             status: 'Fail',
             message: 'Cep inválido, informe um cep válido!'

@@ -25,7 +25,7 @@ const createStore = (data) => __awaiter(void 0, void 0, void 0, function* () {
         const adress = `${data.endereco.logradouro}, ${data.endereco.cidade}, ${data.endereco.estado}, Brasil`;
         store.coordenadas = yield (0, cepToCoordenates_js_1.getCoordenates)(adress);
         yield store.save();
-        loggers_js_1.logger.info("Loja criada: ", store.toJSON);
+        loggers_js_1.logger.info("Requisição para criar loja.");
         return store;
     }
     catch (error) {
@@ -47,7 +47,7 @@ const createStoreByCep = (data, cep) => __awaiter(void 0, void 0, void 0, functi
         const adress = `${newData.logradouro}, ${newData.localidade}, ${newData.estado}, Brasil`;
         store.coordenadas = yield (0, cepToCoordenates_js_1.getCoordenates)(adress);
         yield store.save();
-        loggers_js_1.logger.info("Loja criada: ", store.toJSON());
+        loggers_js_1.logger.info("Requisição para criar loja com CEP.");
         return store;
     }
     catch (error) {
@@ -59,6 +59,7 @@ const createStoreByCep = (data, cep) => __awaiter(void 0, void 0, void 0, functi
 const getAllStores = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const stores = yield storeSchema_js_1.Store.find();
+        loggers_js_1.logger.info("Requesição de todas as lojas.");
         return stores;
     }
     catch (error) {
@@ -73,6 +74,7 @@ const getStoreById = (id) => __awaiter(void 0, void 0, void 0, function* () {
         if (!store) {
             throw new Error('Loja não encontrada!');
         }
+        loggers_js_1.logger.info("Requisição para encontrar loja.");
         return store;
     }
     catch (error) {
@@ -93,6 +95,7 @@ const updateStore = (id, body) => __awaiter(void 0, void 0, void 0, function* ()
         });
         const adress = `${updateStore.endereco.logradouro}, ${updateStore.endereco.cidade}, ${updateStore.endereco.estado}, Brasil`;
         updateStore.coordenadas = yield (0, cepToCoordenates_js_1.getCoordenates)(adress);
+        loggers_js_1.logger.info("Requisição para atualizar loja.");
         return updateStore;
     }
     catch (error) {
@@ -107,6 +110,7 @@ const deleteStore = (id) => __awaiter(void 0, void 0, void 0, function* () {
         if (!store) {
             throw new Error('Loja não encontrada!');
         }
+        loggers_js_1.logger.info("Requesição para deletar loja");
         yield storeSchema_js_1.Store.findByIdAndRemove(id);
     }
     catch (error) {
@@ -136,6 +140,7 @@ const findNearbyStores = (cep) => __awaiter(void 0, void 0, void 0, function* ()
             else
                 return 1;
         });
+        loggers_js_1.logger.info("Requisição para as lojas proximas: ");
         return nearbyStores;
     }
     catch (error) {

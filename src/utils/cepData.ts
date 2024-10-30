@@ -3,7 +3,7 @@ import {logger} from './loggers.js'
 export const cepInfos = async (cep: string) => {
     try{
         const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-        logger.info(response);
+        
          
          if (!response.ok) {
             logger.error(`Erro na requisição ao viacep.`);
@@ -11,6 +11,7 @@ export const cepInfos = async (cep: string) => {
         }
 
         const data = await response.json()
+        logger.info("Requisição ao viaCEP");
         return data;
     }catch(error){
         logger.error(error);

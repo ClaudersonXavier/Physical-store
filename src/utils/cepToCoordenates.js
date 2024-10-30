@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCoordenates = void 0;
+const loggers_1 = require("./loggers");
 const getCoordenates = (adress) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const Response = yield fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(adress)}`);
@@ -17,6 +18,7 @@ const getCoordenates = (adress) => __awaiter(void 0, void 0, void 0, function* (
         if (Data.length === 0) {
             throw new Error('Coordenadas não encontradas');
         }
+        loggers_1.logger.info("Requesição ao nomation.");
         return {
             latitude: Data[0].lat,
             longitude: Data[0].lon,

@@ -14,12 +14,12 @@ const loggers_js_1 = require("./loggers.js");
 const cepInfos = (cep) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield fetch(`https://viacep.com.br/ws/${cep}/json/`);
-        loggers_js_1.logger.info(response);
         if (!response.ok) {
             loggers_js_1.logger.error(`Erro na requisição ao viacep.`);
             throw new Error;
         }
         const data = yield response.json();
+        loggers_js_1.logger.info("Requisição ao viaCEP");
         return data;
     }
     catch (error) {

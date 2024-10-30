@@ -18,7 +18,7 @@ const createStore = async (data: any) =>{
         store.coordenadas = await getCoordenates(adress) 
     
         await store.save();
-        logger.info("Loja criada: ", store.toJSON)
+        logger.info("Requisição para criar loja.")
         return store;  
     }catch(error){
         logger.error("Não foi possivel criar a loja: ", error);
@@ -44,7 +44,7 @@ const createStoreByCep = async (data: any, cep: string) =>{
         store.coordenadas = await getCoordenates(adress) 
         
         await store.save();
-        logger.info("Loja criada: ", store.toJSON())
+        logger.info("Requisição para criar loja com CEP.")
         return store;  
        
    }catch(error){
@@ -57,6 +57,7 @@ const createStoreByCep = async (data: any, cep: string) =>{
 const getAllStores = async () => {
     try{
         const stores = await Store.find();
+        logger.info("Requesição de todas as lojas.")
         return stores;
     }catch(error){
         logger.error("Não foi possivel acessar todas as lojas: ", error);
@@ -71,6 +72,7 @@ const getStoreById = async (id: string) => {
         if(!store){
             throw new Error('Loja não encontrada!');
         }
+        logger.info("Requisição para encontrar loja.");
         return store;
     }catch(error){
         logger.error("Não foi possivel acessar a loja: ", error);
@@ -81,7 +83,7 @@ const getStoreById = async (id: string) => {
 //Atualizando uma a loja do banco de dados pelo ID
 const updateStore = async (id: string, body: any) => {
     try{
-        const store = Store.findById(id);
+        const store = await Store.findById(id);
         if(!store){
             throw new Error('Loja não encontrada!');
         }
@@ -93,7 +95,7 @@ const updateStore = async (id: string, body: any) => {
         const adress = `${updateStore!.endereco!.logradouro}, ${updateStore!.endereco!.cidade}, ${updateStore!.endereco!.estado}, Brasil`
         updateStore!.coordenadas = await getCoordenates(adress) 
 
-        
+        logger.info("Requisição para atualizar loja.")
         return updateStore;
     }catch(error){
         logger.error("Não foi possivel editar a loja: ", error);
@@ -104,10 +106,11 @@ const updateStore = async (id: string, body: any) => {
 //Deletando uma a loja do banco de dados pelo ID
 const deleteStore = async (id: string) => {
     try{
-        const store = Store.findById(id);
+        const store = await Store.findById(id);
         if(!store){
             throw new Error('Loja não encontrada!');
         }
+        logger.info("Requesição para deletar loja")
         await Store.findByIdAndRemove(id);
     }catch(error){
         logger.error("Não foi possivel deletar a loja: ", error);
@@ -139,7 +142,7 @@ const findNearbyStores = async (cep: string) => {
         else return 1
        })
 
-    
+       logger.info("Requisição para as lojas proximas: ");
        return nearbyStores;
    }catch(error){
         logger.error("Não foi possivel acessar as lojas proximas: ", error);
