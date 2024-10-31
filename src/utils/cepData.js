@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.cepInfos = void 0;
 const loggers_js_1 = require("./loggers.js");
 const cepInfos = (cep) => __awaiter(void 0, void 0, void 0, function* () {
+    loggers_js_1.logger.info("Requisição ao viaCEP");
     try {
         const response = yield fetch(`https://viacep.com.br/ws/${cep}/json/`);
         if (!response.ok) {
@@ -19,7 +20,7 @@ const cepInfos = (cep) => __awaiter(void 0, void 0, void 0, function* () {
             throw new Error;
         }
         const data = yield response.json();
-        loggers_js_1.logger.info("Requisição ao viaCEP");
+        loggers_js_1.logger.info("Retornando os dados do viaCEP");
         return data;
     }
     catch (error) {

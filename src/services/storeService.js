@@ -25,7 +25,7 @@ const createStore = (data) => __awaiter(void 0, void 0, void 0, function* () {
         const adress = `${data.endereco.logradouro}, ${data.endereco.cidade}, ${data.endereco.estado}, Brasil`;
         store.coordenadas = yield (0, cepToCoordenates_js_1.getCoordenates)(adress);
         yield store.save();
-        loggers_js_1.logger.info("Requisição para criar loja.");
+        loggers_js_1.logger.info("Loja criada.");
         return store;
     }
     catch (error) {
@@ -47,7 +47,7 @@ const createStoreByCep = (data, cep) => __awaiter(void 0, void 0, void 0, functi
         const adress = `${newData.logradouro}, ${newData.localidade}, ${newData.estado}, Brasil`;
         store.coordenadas = yield (0, cepToCoordenates_js_1.getCoordenates)(adress);
         yield store.save();
-        loggers_js_1.logger.info("Requisição para criar loja com CEP.");
+        loggers_js_1.logger.info("Loja criada com o CEP.");
         return store;
     }
     catch (error) {
@@ -59,7 +59,7 @@ const createStoreByCep = (data, cep) => __awaiter(void 0, void 0, void 0, functi
 const getAllStores = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const stores = yield storeSchema_js_1.Store.find();
-        loggers_js_1.logger.info("Requesição de todas as lojas.");
+        loggers_js_1.logger.info("Retornando todas as lojas");
         return stores;
     }
     catch (error) {
@@ -74,7 +74,7 @@ const getStoreById = (id) => __awaiter(void 0, void 0, void 0, function* () {
         if (!store) {
             throw new Error('Loja não encontrada!');
         }
-        loggers_js_1.logger.info("Requisição para encontrar loja.");
+        loggers_js_1.logger.info("Retornando a loja encontrada.");
         return store;
     }
     catch (error) {
@@ -84,8 +84,9 @@ const getStoreById = (id) => __awaiter(void 0, void 0, void 0, function* () {
 });
 //Atualizando uma a loja do banco de dados pelo ID
 const updateStore = (id, body) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const store = storeSchema_js_1.Store.findById(id);
+        const store = yield storeSchema_js_1.Store.findById(id);
         if (!store) {
             throw new Error('Loja não encontrada!');
         }
@@ -93,9 +94,11 @@ const updateStore = (id, body) => __awaiter(void 0, void 0, void 0, function* ()
             new: true,
             runValidators: true
         });
-        const adress = `${updateStore.endereco.logradouro}, ${updateStore.endereco.cidade}, ${updateStore.endereco.estado}, Brasil`;
-        updateStore.coordenadas = yield (0, cepToCoordenates_js_1.getCoordenates)(adress);
-        loggers_js_1.logger.info("Requisição para atualizar loja.");
+        if (store.endereco.CEP !== ((_a = updateStore.endereco) === null || _a === void 0 ? void 0 : _a.CEP)) {
+            const adress = `${updateStore.endereco.logradouro}, ${updateStore.endereco.cidade}, ${updateStore.endereco.estado}, Brasil`;
+            updateStore.coordenadas = yield (0, cepToCoordenates_js_1.getCoordenates)(adress);
+        }
+        loggers_js_1.logger.info("Loja atualizada.");
         return updateStore;
     }
     catch (error) {
@@ -106,11 +109,11 @@ const updateStore = (id, body) => __awaiter(void 0, void 0, void 0, function* ()
 //Deletando uma a loja do banco de dados pelo ID
 const deleteStore = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const store = storeSchema_js_1.Store.findById(id);
+        const store = yield storeSchema_js_1.Store.findById(id);
         if (!store) {
             throw new Error('Loja não encontrada!');
         }
-        loggers_js_1.logger.info("Requesição para deletar loja");
+        loggers_js_1.logger.info("Loja deletada.");
         yield storeSchema_js_1.Store.findByIdAndRemove(id);
     }
     catch (error) {
@@ -140,7 +143,7 @@ const findNearbyStores = (cep) => __awaiter(void 0, void 0, void 0, function* ()
             else
                 return 1;
         });
-        loggers_js_1.logger.info("Requisição para as lojas proximas: ");
+        loggers_js_1.logger.info("Busca de lojas próximas concluida.");
         return nearbyStores;
     }
     catch (error) {

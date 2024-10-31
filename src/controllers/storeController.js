@@ -15,6 +15,7 @@ const storeService_js_1 = require("../services/storeService.js");
 //Criando a loja com todos os dados manuais
 const createStore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        loggers_js_1.logger.info("Requisição para criar loja.");
         const data = req.body;
         const store = yield storeService_js_1.storeService.createStore(data);
         res.status(200).json({
@@ -35,6 +36,7 @@ const createStore = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 //Criando a loja com as informações do cep dado
 const createStoreByCep = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        loggers_js_1.logger.info("Requisição para criar loja com o CEP.");
         const data = req.body;
         const cep = req.params.cep;
         const store = yield storeService_js_1.storeService.createStoreByCep(data, cep);
@@ -56,6 +58,7 @@ const createStoreByCep = (req, res) => __awaiter(void 0, void 0, void 0, functio
 //Pegando todas as lojas do banco de dados
 const getAllStores = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        loggers_js_1.logger.info("Requesição de todas as lojas.");
         const stores = yield storeService_js_1.storeService.getAllStores();
         //Filtragem dos campos que irão ser mandado como resposta
         const filteredStores = stores.map(store => ({
@@ -83,6 +86,7 @@ const getAllStores = (_req, res) => __awaiter(void 0, void 0, void 0, function* 
 //Pegando uma loja específica pelo id no banco de dados
 const getStore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        loggers_js_1.logger.info("Requesição de uma loja pelo id.");
         const store = yield storeService_js_1.storeService.getStoreById(req.params.id);
         //Filtragem dos campos que irão ser mandado como resposta
         const filteredStore = {
@@ -108,6 +112,7 @@ const getStore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 //Pegando uma loja específica pelo id e atualizando-a no banco de dados
 const updateStore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    loggers_js_1.logger.info("Requisição para atualizar uma loja.");
     try {
         const store = yield storeService_js_1.storeService.updateStore(req.params.id, req.body);
         res.status(200).json({
@@ -127,6 +132,7 @@ const updateStore = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 //Pegando uma loja específica pelo id e deletando-a no banco de dados
 const deleteStore = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    loggers_js_1.logger.info("Requesição para deletar loja.");
     try {
         yield storeService_js_1.storeService.deleteStore(req.params.id);
         res.status(204).json({
@@ -146,6 +152,7 @@ const deleteStore = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 //Achar as lojas mais próximas do usuário no raio de 100 km
 const findNearbyStores = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    loggers_js_1.logger.info("Requisição para a busca de lojas próximas.");
     try {
         const cep = req.params.cep;
         const storesDistance = yield storeService_js_1.storeService.findNearbyStores(cep);
@@ -154,6 +161,7 @@ const findNearbyStores = (req, res) => __awaiter(void 0, void 0, void 0, functio
                 status: 'Success',
                 message: 'Não há loja próximas no raio de 100 km'
             });
+            return;
         }
         //Filtragem dos campos que irão ser mandado como resposta
         const filteredStores = storesDistance.map(store => ({

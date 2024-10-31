@@ -4,6 +4,7 @@ import { storeService } from '../services/storeService.js'
 //Criando a loja com todos os dados manuais
 const createStore = async (req: any, res: any) => {
     try{
+        logger.info("Requisição para criar loja.");
         const data = req.body;
         const store = await storeService.createStore(data);
         res.status(200).json({
@@ -24,6 +25,7 @@ const createStore = async (req: any, res: any) => {
 //Criando a loja com as informações do cep dado
 const createStoreByCep = async (req: any, res: any) => {
     try{
+        logger.info("Requisição para criar loja com o CEP.");
         const data = req.body;
         const cep = req.params.cep
         const store = await storeService.createStoreByCep(data, cep);
@@ -45,6 +47,7 @@ const createStoreByCep = async (req: any, res: any) => {
 //Pegando todas as lojas do banco de dados
 const getAllStores = async (_req: any, res: any) => {
     try{
+        logger.info("Requesição de todas as lojas.");
         const stores = await storeService.getAllStores()
 
         //Filtragem dos campos que irão ser mandado como resposta
@@ -74,6 +77,7 @@ const getAllStores = async (_req: any, res: any) => {
 //Pegando uma loja específica pelo id no banco de dados
 const getStore = async (req: any, res: any) => {
     try{
+        logger.info("Requesição de uma loja pelo id.");
         const store = await storeService.getStoreById(req.params.id);
 
         //Filtragem dos campos que irão ser mandado como resposta
@@ -101,7 +105,7 @@ const getStore = async (req: any, res: any) => {
 
 //Pegando uma loja específica pelo id e atualizando-a no banco de dados
 const updateStore = async (req: any, res: any) => {
-
+    logger.info("Requisição para atualizar uma loja.")
     try{
         const store = await storeService.updateStore(req.params.id, req.body);
 
@@ -122,7 +126,7 @@ const updateStore = async (req: any, res: any) => {
 
 //Pegando uma loja específica pelo id e deletando-a no banco de dados
 const deleteStore = async (req: any, res: any) => {
-
+    logger.info("Requesição para deletar loja.")
     try{
 
         await storeService.deleteStore(req.params.id)
@@ -144,6 +148,7 @@ const deleteStore = async (req: any, res: any) => {
 
 //Achar as lojas mais próximas do usuário no raio de 100 km
 const findNearbyStores = async (req: any, res: any) =>{
+    logger.info("Requisição para a busca de lojas próximas.");
     try{
         const cep = req.params.cep
         const storesDistance = await storeService.findNearbyStores(cep)
@@ -153,6 +158,7 @@ const findNearbyStores = async (req: any, res: any) =>{
                 status: 'Success',
                 message: 'Não há loja próximas no raio de 100 km'
             })
+            return;
         }
         //Filtragem dos campos que irão ser mandado como resposta
         const filteredStores = storesDistance.map(store => ({

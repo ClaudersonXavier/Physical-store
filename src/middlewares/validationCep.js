@@ -4,7 +4,7 @@ exports.validateCep = void 0;
 const validateCep = (req, res, next) => {
     const data = req.params.cep || req.body;
     // Verifica se o CEP está presente
-    const cep = data || data.CEP || data.endereco.CEP;
+    const cep = typeof (data) === 'string' ? data : data.endereco.CEP;
     if (!cep) {
         return res.status(400).json({
             status: 'Fail',
